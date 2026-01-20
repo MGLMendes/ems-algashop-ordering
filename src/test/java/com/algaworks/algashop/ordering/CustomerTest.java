@@ -24,7 +24,8 @@ class CustomerTest {
 
         customer.addLoyaltyPoints(10);
         customer.changeEmail("jhon.due@gmail.com");
-
+        System.out.println("Customer ID: " + customer.id());
+//        System.out.println(customer.getId());
     }
 
 }
