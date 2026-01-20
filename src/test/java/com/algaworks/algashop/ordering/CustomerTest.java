@@ -1,18 +1,18 @@
 package com.algaworks.algashop.ordering;
 
 import com.algaworks.algashop.ordering.domain.entity.Customer;
+import com.algaworks.algashop.ordering.domain.utility.IdGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 class CustomerTest {
 
     @Test
     public void testingCustomer() {
         Customer customer = new Customer(
-                UUID.randomUUID(),
+                IdGenerator.generatedTimeBasedUUID(),
                 "Jhon Due",
                 LocalDate.of(1991, 7, 5),
                 "jhon.due@email.com",
@@ -25,7 +25,7 @@ class CustomerTest {
         customer.addLoyaltyPoints(10);
         customer.changeEmail("jhon.due@gmail.com");
         System.out.println("Customer ID: " + customer.id());
-//        System.out.println(customer.getId());
+        System.out.println("ID Generator: " + IdGenerator.generatedTimeBasedUUID());
     }
 
 }
