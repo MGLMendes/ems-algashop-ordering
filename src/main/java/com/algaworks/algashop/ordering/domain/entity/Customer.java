@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
+import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.validator.FieldValidations;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -24,37 +24,40 @@ public class Customer {
     private Integer loyaltyPoints;
 
     public Customer(UUID id, String fullName, LocalDate birthDate, String email, String phone,
-                    String document, Boolean promotionNotificationsAllowed,
-                    OffsetDateTime registeredAt, OffsetDateTime archivedAt) {
-        setId(id);
-        setFullName(fullName);
-        setBirthDate(birthDate);
-        setEmail(email);
-        setPhone(phone);
-        setDocument(document);
-        setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        setArchived(false);
-        setRegisteredAt(registeredAt);
-        setArchivedAt(archivedAt);
-        setLoyaltyPoints(0);
+                    String document, Boolean promotionNotificationsAllowed, Boolean archived,
+                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, Integer loyaltyPoints) {
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setBirthDate(birthDate);
+        this.setEmail(email);
+        this.setPhone(phone);
+        this.setDocument(document);
+        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
+        this.setArchived(archived);
+        this.setRegisteredAt(registeredAt);
+        this.setArchivedAt(archivedAt);
+        this.setLoyaltyPoints(loyaltyPoints);
     }
 
     public Customer(UUID id, String fullName, LocalDate birthDate,
                     String email, String phone, String document,
                     Boolean promotionNotificationsAllowed, OffsetDateTime registeredAt) {
-        setId(id);
-        setFullName(fullName);
-        setBirthDate(birthDate);
-        setEmail(email);
-        setPhone(phone);
-        setDocument(document);
-        setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        setRegisteredAt(registeredAt);
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setBirthDate(birthDate);
+        this.setEmail(email);
+        this.setPhone(phone);
+        this.setDocument(document);
+        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
+        this.setRegisteredAt(registeredAt);
+        this.setArchived(false);
+        this.setLoyaltyPoints(0);
     }
 
     public void addLoyaltyPoints(Integer points) {}
 
     public void archive(){
+        verifyIfChangeable();
         this.setArchived(true);
         this.setArchivedAt(OffsetDateTime.now());
         this.setFullName("Anonymous");
@@ -62,23 +65,29 @@ public class Customer {
         this.setDocument("000-000-0000");
         this.setBirthDate(null);
         this.setEmail(UUID.randomUUID() + "@email.com");
+        this.setPromotionNotificationsAllowed(false);
     }
 
     public void enablePromotionNotifications() {
+        verifyIfChangeable();
         this.setPromotionNotificationsAllowed(true);
     }
     public void disablePromotionNotifications() {
+        verifyIfChangeable();
         this.setPromotionNotificationsAllowed(false);
     }
 
     public void changeName(String fullName) {
+        verifyIfChangeable();
         this.setFullName(fullName);
     }
 
     public void changeEmail(String email) {
+        verifyIfChangeable();
         this.setEmail(email);
     }
     public void changePhone(String phone) {
+        verifyIfChangeable();
         this.setPhone(phone);
     }
 
@@ -188,6 +197,12 @@ public class Customer {
     private void setLoyaltyPoints(Integer loyaltyPoints) {
         Objects.requireNonNull(loyaltyPoints);
         this.loyaltyPoints = loyaltyPoints;
+    }
+
+    private void verifyIfChangeable() {
+        if (Boolean.TRUE.equals(this.archived())) {
+            throw new CustomerArchivedException();
+        }
     }
 
     @Override
