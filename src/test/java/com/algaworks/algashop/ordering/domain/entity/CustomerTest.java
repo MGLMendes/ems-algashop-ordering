@@ -12,6 +12,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomerTest {
 
+    private Address getAddress() {
+        return Address.builder()
+                .street("Bourbon Stree")
+                .number("1145")
+                .neighborhood("North Ville")
+                .city("York")
+                .state("South Carolina")
+                .zipCode(new ZipCode("12345"))
+                .complement("Apt. 114")
+                .build();
+    }
+
     @Test
     void given_invalidEmail_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
@@ -23,7 +35,8 @@ class CustomerTest {
                         new Phone("478-256-2504"),
                         new Document("255-08-0578"),
                         false,
-                        OffsetDateTime.now()
+                        OffsetDateTime.now(),
+                        getAddress()
                 ));
     }
 
@@ -37,7 +50,8 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                getAddress()
         );
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
@@ -54,7 +68,8 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                getAddress()
         );
 
         customer.archive();
@@ -65,7 +80,16 @@ class CustomerTest {
                 c -> assertThat(c.phone()).isEqualTo(new Phone("000-000-0000")),
                 c -> assertThat(c.document()).isEqualTo(new Document("000-00-0000")),
                 c -> assertThat(c.birthDate()).isNull(),
-                c -> assertThat(c.promotionNotificationsAllowed()).isFalse()
+                c -> assertThat(c.promotionNotificationsAllowed()).isFalse(),
+                c -> assertThat(c.address()).isEqualTo(Address.builder()
+                        .street("Bourbon Stree")
+                        .number("Anonymized")
+                        .neighborhood("North Ville")
+                        .city("York")
+                        .state("South Carolina")
+                        .zipCode(new ZipCode("12345"))
+                        .complement(null)
+                        .build())
         );
 
     }
@@ -83,7 +107,8 @@ class CustomerTest {
                 true,
                 OffsetDateTime.now(),
                 OffsetDateTime.now(),
-                new LoyaltyPoints(10)
+                new LoyaltyPoints(10),
+                getAddress()
         );
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
@@ -112,7 +137,8 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                getAddress()
         );
 
         customer.addLoyaltyPoints(new LoyaltyPoints(10));
@@ -131,7 +157,8 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                getAddress()
         );
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
