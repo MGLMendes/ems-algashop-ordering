@@ -1,6 +1,5 @@
 package com.algaworks.algashop.ordering.domain.valueobject;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 public record LoyaltyPoints(Integer value) implements Comparable<LoyaltyPoints> {
