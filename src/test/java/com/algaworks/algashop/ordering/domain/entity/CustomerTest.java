@@ -25,29 +25,31 @@ class CustomerTest {
     }
 
     private Customer getBasicCustomer() {
-        return Customer.brandNew(
-                new FullName("John", "Doe"),
-                new BirthDate(LocalDate.of(1991, 7, 5)),
-                new Email("validEmail@email.com"),
-                new Phone("478-256-2504"),
-                new Document("255-08-0578"),
-                false,
-                getBasicAddress()
-        );
+        return Customer.brandNew()
+                .fullName(new FullName("John", "Doe"))
+                .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)))
+                .email(new Email("validEmail@email.com"))
+                .phone(new Phone("478-256-2504"))
+                .document(new Document("255-08-0578"))
+                .promotionNotificationsAllowed(false)
+                .address(getBasicAddress())
+                .build();
     }
+
 
     @Test
     void given_invalidEmail_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()-> Customer.brandNew(
-                        new FullName("John", "Doe"),
-                        new BirthDate(LocalDate.of(1991, 7, 5)),
-                        new Email("invalid"),
-                        new Phone("478-256-2504"),
-                        new Document("255-08-0578"),
-                        false,
-                        getBasicAddress()
-                ));
+                .isThrownBy(() -> Customer.brandNew()
+                        .fullName(new FullName("John", "Doe"))
+                        .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)))
+                        .email(new Email("invalid"))
+                        .phone(new Phone("478-256-2504"))
+                        .document(new Document("255-08-0578"))
+                        .promotionNotificationsAllowed(false)
+                        .address(getBasicAddress())
+                        .build()
+                );
     }
 
     @Test
@@ -55,7 +57,7 @@ class CustomerTest {
         Customer customer = getBasicCustomer();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()-> customer.changeEmail(new Email("invalid")));
+                .isThrownBy(() -> customer.changeEmail(new Email("invalid")));
     }
 
     @Test
@@ -65,7 +67,7 @@ class CustomerTest {
         customer.archive();
 
         Assertions.assertWith(customer,
-                c -> assertThat(c.fullName()).isEqualTo(new FullName("Anonymous","Anonymous")),
+                c -> assertThat(c.fullName()).isEqualTo(new FullName("Anonymous", "Anonymous")),
                 c -> assertThat(c.email()).isNotEqualTo(new Email("john.doe@gmail.com")),
                 c -> assertThat(c.phone()).isEqualTo(new Phone("000-000-0000")),
                 c -> assertThat(c.document()).isEqualTo(new Document("000-00-0000")),
@@ -86,29 +88,30 @@ class CustomerTest {
 
     @Test
     void given_archivedCustomer_whenTryToUpdate_shouldGenerateException() {
-        Customer customer = Customer.existing(
-                new CustomerId(),
-                new FullName("Anonymous", "Anonymous"),
-                null,
-                new Email("anonymous@anonymous.com"),
-                new Phone("000-000-0000"),
-                new Document("000-00-0000"),
-                false,
-                true,
-                OffsetDateTime.now(),
-                OffsetDateTime.now(),
-                new LoyaltyPoints(10),
-                getBasicAddress()
-        );
+        Customer customer = Customer.existing()
+                .id(new CustomerId())
+                .fullName(new FullName("Anonymous", "Anonymous"))
+                .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)))
+                .email(new Email("anonymous@anonymous.com"))
+                .phone(new Phone("000-000-0000"))
+                .document(new Document("000-00-0000"))
+                .promotionNotificationsAllowed(false)
+                .archived(true)
+                .registeredAt(OffsetDateTime.now())
+                .archivedAt(OffsetDateTime.now())
+                .loyaltyPoints(new LoyaltyPoints(10))
+                .address(getBasicAddress())
+                .build();
+
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::archive);
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(()-> customer.changeEmail(new Email("email@gmail.com")));
+                .isThrownBy(() -> customer.changeEmail(new Email("email@gmail.com")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(()-> customer.changePhone(new Phone("123-123-1111")));
+                .isThrownBy(() -> customer.changePhone(new Phone("123-123-1111")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::enablePromotionNotifications);
@@ -132,9 +135,9 @@ class CustomerTest {
         Customer customer = getBasicCustomer();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()-> customer.addLoyaltyPoints(new LoyaltyPoints(0)));
+                .isThrownBy(() -> customer.addLoyaltyPoints(new LoyaltyPoints(0)));
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()-> customer.addLoyaltyPoints(new LoyaltyPoints(-10)));
+                .isThrownBy(() -> customer.addLoyaltyPoints(new LoyaltyPoints(-10)));
     }
 }
