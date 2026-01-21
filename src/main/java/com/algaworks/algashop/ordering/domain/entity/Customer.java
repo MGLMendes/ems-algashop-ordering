@@ -22,7 +22,7 @@ public class Customer {
     private LoyaltyPoints loyaltyPoints;
     private Address address;
 
-    @Builder(builderClassName = "BrandNewCustomerBuilder", builderMethodName = "brandNew")
+    @Builder(builderClassName = "BrandNewCustomerBuild", builderMethodName = "brandNew")
     private static Customer createBrandNew(FullName fullName, BirthDate birthDate,
                                     Email email, Phone phone, Document document,
                                     Boolean promotionNotificationsAllowed, Address address) {
@@ -42,7 +42,7 @@ public class Customer {
         );
     }
 
-    @Builder(builderClassName = "ExistingCustomerBuilder", builderMethodName = "existing")
+    @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
     private Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
                     Document document, Boolean promotionNotificationsAllowed, Boolean archived,
                     OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
