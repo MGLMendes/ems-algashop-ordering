@@ -54,7 +54,15 @@ public class Customer {
 
     public void addLoyaltyPoints(Integer points) {}
 
-    public void archive(){}
+    public void archive(){
+        this.setArchived(true);
+        this.setArchivedAt(OffsetDateTime.now());
+        this.setFullName("Anonymous");
+        this.setPhone("000-000-0000");
+        this.setDocument("000-000-0000");
+        this.setBirthDate(null);
+        this.setEmail(UUID.randomUUID() + "@email.com");
+    }
 
     public void enablePromotionNotifications() {
         this.setPromotionNotificationsAllowed(true);
