@@ -21,6 +21,7 @@ public class IdGenerator {
     }
 
     public static TSID generateTSID() {
-        return tsidFactory.generate();
+        TSID generate = tsidFactory.generate();
+        return generate;
     }
 }
