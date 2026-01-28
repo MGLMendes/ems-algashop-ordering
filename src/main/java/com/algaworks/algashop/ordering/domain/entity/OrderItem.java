@@ -81,7 +81,6 @@ public class OrderItem {
 
     private void recalculateTotals() {
         this.setTotalAmount(this.price.multiply(this.quantity));
-
     }
 
     private void setId(OrderItemId id) {
