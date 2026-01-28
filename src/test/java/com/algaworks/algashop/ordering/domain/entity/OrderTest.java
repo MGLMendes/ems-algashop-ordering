@@ -55,4 +55,27 @@ class OrderTest {
                 items::clear
         );
     }
+
+    @Test
+    public void shouldCalculateTotals() {
+        Order order = Order.draft(new CustomerId());
+        order.addItem(
+                new ProductId(),
+                new ProductName("Mouse Pad"),
+                new Money("100"),
+                new Quantity(2));
+
+        Assertions.assertThat(order.totalAmount()).isEqualTo(new Money("200"));
+        Assertions.assertThat(order.totalItems()).isEqualTo(new Quantity(2));
+
+        order.addItem(
+                new ProductId(),
+                new ProductName("RAM Memory"),
+                new Money("400"),
+                new Quantity(2));
+
+        Assertions.assertThat(order.totalAmount()).isEqualTo(new Money("1000"));
+        Assertions.assertThat(order.totalItems()).isEqualTo(new Quantity(4));
+
+    }
 }
