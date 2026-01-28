@@ -24,7 +24,8 @@ public class OrderItem {
     private Money totalAmount;
 
     @Builder(builderClassName = "ExistingOrderItemBuilder", builderMethodName = "existing")
-    public OrderItem(OrderItemId id, OrderId orderId, ProductId productId, ProductName productName, Money price, Quantity quantity, Money totalAmount) {
+    public OrderItem(OrderItemId id, OrderId orderId, ProductId productId, ProductName productName,
+                     Money price, Quantity quantity, Money totalAmount) {
         this.setId(id);
         this.setOrderId(orderId);
         this.setProductId(productId);

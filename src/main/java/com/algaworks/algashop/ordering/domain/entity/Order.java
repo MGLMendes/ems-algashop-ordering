@@ -2,13 +2,12 @@ package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.entity.enums.OrderStatus;
 import com.algaworks.algashop.ordering.domain.entity.enums.PaymentMethod;
-import com.algaworks.algashop.ordering.domain.valueobject.BillingInfo;
-import com.algaworks.algashop.ordering.domain.valueobject.Money;
-import com.algaworks.algashop.ordering.domain.valueobject.Quantity;
-import com.algaworks.algashop.ordering.domain.valueobject.ShippingInfo;
+import com.algaworks.algashop.ordering.domain.valueobject.*;
 import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import lombok.Builder;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -80,6 +79,25 @@ public class Order {
                 null,
                 new HashSet<>()
         );
+    }
+
+    public void addItem(ProductId productId, ProductName productName,
+                        Money price, Quantity quantity) {
+
+        OrderItem brandNew = OrderItem.brandNew()
+                .orderId(this.id())
+                .productId(productId)
+                .productName(productName)
+                .price(price)
+                .quantity(quantity)
+                .build();
+
+        if (CollectionUtils.isEmpty(this.items)) {
+            this.items = new HashSet<>();
+        }
+
+        this.items.add(brandNew);
+
     }
 
     public OrderId id() {
